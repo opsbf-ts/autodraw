@@ -1,6 +1,8 @@
-import Opsbf from './index';
+import Autodraw from './index';
 
-const opsbf: Opsbf = new Opsbf();
+const autodraw: Autodraw = new Autodraw();
 test('first test', () => {
-   expect(opsbf.test()).toBe(true);
+   expect(autodraw.test()).toBe(true);
 });
+
+

@@ -45,21 +45,24 @@ Test-Driven-Development
 ## Module test
 
 ```ts
-import Opsbf from '@opsbf/opsbf';
+import Autodraw from '@opsbf/autodraw';
 
-const opsbf = new Opsbf();
-if(opsbf.test()) {
+const autodraw = new Autodraw();
+if(autodraw.test()) {
    console.log("it works");
 }
 ```
 
 ## github / npm
 
+planned projects
+
 ```bash
 @opsbf-ts
  - autodraw
  - react-view
- - tamperMonkey-iitc-plugin
+ - tamper-monkey-iitc-plugin
  - homepage
  - docu?
+ - @types/opsbf ???
 ```

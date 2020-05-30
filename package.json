@@ -7,14 +7,15 @@
     "opsbf",
     "draw",
     "bookmarks",
-    "iitc"
+    "iitc",
+    "autodraw"
   ],
   "author": "Lars 'vreezy' Eschweiler",
   "license": "MIT",
-  "homepage": "https://opsbf.vreezy.de",
+  "homepage": "https://opsbf-ts.vreezy.de",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vreezy/opsbf"
+    "url": "https://github.com/opsbf-ts/autodraw"
   },
   "main": "./dist/index.js",
   "dependencies": {},
