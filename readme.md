@@ -16,6 +16,9 @@ Test-Driven-Development
 - npm add --dev babel-jest @babel/core @babel/preset-env
 - npm install eslint --save-dev
 
+- npm i uuid --save
+- npm install @types/uuid
+
 ## eslint settings
 
 - How would you like to use ESLint? To check syntax, find problems, and enforce code style
@@ -64,5 +67,5 @@ planned projects
  - tamper-monkey-iitc-plugin
  - homepage
  - docu?
- - @types/opsbf ???
+ - @types/opsbf ??? -> tsc --declaration
 ```

@@ -18,7 +18,11 @@
     "url": "https://github.com/opsbf-ts/autodraw"
   },
   "main": "./dist/index.js",
-  "dependencies": {},
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@types/uuid": "^8.0.0",
+    "uuid": "^8.1.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.10.1",
     "@babel/preset-env": "^7.10.1",
@@ -36,8 +40,8 @@
     "typescript": "^3.9.3"
   },
   "scripts": {
-    "start": "tsc --watch --sourceMap",
-    "build": "tsc",
+    "start": "tsc --watch --sourceMap --declaration",
+    "build": "tsc --declaration",
     "test": "jest"
   }
 }
