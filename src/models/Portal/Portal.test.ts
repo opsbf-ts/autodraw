@@ -1,5 +1,7 @@
-import Portal from './Portal';
 import Glyph from '../Glyph/Glyph';
+import Point from '../Point/Point';
+import Portal from './Portal';
+
 
 
 /**
@@ -15,8 +17,8 @@ class TestGlyph extends Glyph {
 }
 
 const testGlyph: Glyph = new TestGlyph();
-const portal1: Portal = new Portal();
-const portal2: Portal = new Portal();
+const portal1: Portal = new Portal(new Point(50.929868, 6.37841));
+const portal2: Portal = new Portal(new Point(50.929868, 6.37841));
 
 // uuidv4 test
 // https://gist.github.com/johnelliott/cf77003f72f889abbc3f32785fa3df8d
@@ -28,11 +30,10 @@ test('public Portal.toString()', () => {
    expect(testGlyph.toString()).toMatch(v4);
 });
 
-test('static portalCount', () => {
+test('count', () => {
+  expect(Glyph.count).toBe(5);
+  expect(Point.count).toBe(5);
+  expect(Portal.count).toBe(5);
+  expect(Point.pointCount).toBe(2);
   expect(Portal.portalCount).toBe(2);
-});
-
-test('static count', () => {
-  expect(Portal.count).toBe(3);
-  expect(Glyph.count).toBe(3);
 });
