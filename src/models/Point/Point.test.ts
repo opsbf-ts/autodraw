@@ -37,8 +37,8 @@ test('static pointCount', () => {
 });
 
 test('static count', () => {
-  expect(Point.count).toBe(4);
   expect(Glyph.count).toBe(4);
+  expect(Point.pointCount).toBe(3);
 });
 
 test('lat & lng', () => {
