@@ -1,6 +1,5 @@
 /* eslint-disable comma-dangle */
 import Glyph from './models/Glyph/Glyph';
-import Point from './models/Point/Point';
 import Portal from './models/Portal/Portal';
 import Link from './models/Link/Link';
 
@@ -23,7 +22,7 @@ class Autodraw extends Glyph {
    * @memberof Autodraw
    */
   public addPortal = (portal: any): void => {
-    this.portals.push(new Portal(new Point(portal.lat, portal.lng)));
+    this.portals.push(new Portal(portal.lat, portal.lng));
 
     // TODO set OPSBF IDS -> a1, b2...
   }
@@ -36,11 +35,11 @@ class Autodraw extends Glyph {
   public addLink = (link: any): void => {
     this.links.push(
       new Link(
-        new Point(
+        new Portal(
           link.from.lat,
           link.from.lng,
         ),
-        new Point(
+        new Portal(
           link.to.lat,
           link.to.lng,
         ),
@@ -66,7 +65,7 @@ class Autodraw extends Glyph {
   public getMidLat = (): number => {
     if (this.portals.length > 0) {
       const sumMidLat: number = this.portals
-        .map((portal: Portal): number => portal.lat())
+        .map((portal: Portal): number => portal.getLat())
         .reduce((total: number, num: number) => total + num);
       return sumMidLat / this.portals.length;
     }
@@ -81,7 +80,7 @@ class Autodraw extends Glyph {
   public getMidLng = (): number => {
     if (this.portals.length > 0) {
       const sumMidLng: number = this.portals
-        .map((portal: Portal): number => portal.lng())
+        .map((portal: Portal): number => portal.getLng())
         .reduce((total: number, num: number) => total + num);
       return sumMidLng / this.portals.length;
     }
@@ -89,7 +88,7 @@ class Autodraw extends Glyph {
   }
 
   /**
-   * getMid
+   * getMid of ALL Portals
    *
    * @memberof Autodraw
    */
@@ -99,6 +98,55 @@ class Autodraw extends Glyph {
       lng: this.getMidLng(),
     }
   )
+
+  /**
+   * define the areas for each Portal
+   * this is the old OPSBF ID a1, b2, c4...
+   *
+   * @private
+   * @memberof Autodraw
+   */
+  private areaPortals = () => {
+    if (this.portals.length < 3) {
+      return;
+    }
+
+    // find A outest. It's the Portal that is farthest from Mid
+    const midPortal = new Portal(this.getMidLng(), this.getMidLat());
+    let aOutestPortal: Portal = this.portals[0];
+    let aFarthestLengthCache: Number = 0;
+    this.portals.forEach((portal: Portal) => {
+      const curLength: number = new Link(portal, midPortal).orthodrom();
+      if (curLength > aFarthestLengthCache) {
+        aFarthestLengthCache = curLength;
+        aOutestPortal = portal;
+      }
+    });
+
+    // find B outest. It's the Portal that is farthest from aOutestPortal
+    let bOutestPortal: Portal = this.portals[1];
+    let bFarthestLengthCache: Number = 0;
+    this.portals.forEach((portal: Portal) => {
+      const curLength: number = new Link(portal, midPortal).orthodrom();
+      if (curLength > bFarthestLengthCache) {
+        bFarthestLengthCache = curLength;
+        bOutestPortal = portal;
+      }
+    });
+
+    // find C outest. It's the Portal that makes the biggest field with aOutestPortal + bOutestPortal
+    let cOutestPortal: Portal = this.portals[2];
+    let cHighestVolumeCache: number = 0;
+    this.portals.forEach((portal: Portal) => {
+      const curVolume: number = Link.volume(aOutestPortal, bOutestPortal, portal);
+      if (curVolume > cHighestVolumeCache) {
+        cHighestVolumeCache = curVolume;
+        cOutestPortal = portal;
+      }
+    });
+
+    const mid: IPoint = Link.getMid(aOutestPortal, bOutestPortal, cOutestPortal);
+  }
 
   public getDraw = () => {
     // dd
