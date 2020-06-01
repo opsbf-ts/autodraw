@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable comma-dangle */
 import Glyph from './models/Glyph/Glyph';
 import Portal from './models/Portal/Portal';
@@ -15,6 +16,11 @@ class Autodraw extends Glyph {
   //   // this.portals = [];
   //   // this.links = [];
   // }
+
+  public reset = () => {
+    this.portals = [];
+    this.links = [];
+  }
 
   /**
    * addPortal
@@ -92,7 +98,7 @@ class Autodraw extends Glyph {
    *
    * @memberof Autodraw
    */
-  public getMid = (): IPoint => (
+  public getMidPortals = (): IPoint => (
     {
       lat: this.getMidLat(),
       lng: this.getMidLng(),
@@ -111,41 +117,53 @@ class Autodraw extends Glyph {
       return;
     }
 
-    // find A outest. It's the Portal that is farthest from Mid
-    const midPortal = new Portal(this.getMidLng(), this.getMidLat());
+    // 1. getMid
+    const midPoint = new Portal(this.getMidLng(), this.getMidLat());
+
+    // 2. find A outest. It's the Portal that is farthest from Mid
     let aOutestPortal: Portal = this.portals[0];
     let aFarthestLengthCache: Number = 0;
     this.portals.forEach((portal: Portal) => {
-      const curLength: number = new Link(portal, midPortal).orthodrom();
+      const curLength: number = new Link(portal, midPoint).getOrthodrome();
       if (curLength > aFarthestLengthCache) {
         aFarthestLengthCache = curLength;
         aOutestPortal = portal;
       }
     });
 
-    // find B outest. It's the Portal that is farthest from aOutestPortal
+    // 3. find B outest. It's the Portal that is farthest from aOutestPortal
     let bOutestPortal: Portal = this.portals[1];
     let bFarthestLengthCache: Number = 0;
     this.portals.forEach((portal: Portal) => {
-      const curLength: number = new Link(portal, midPortal).orthodrom();
+      const curLength: number = new Link(portal, midPoint).getOrthodrome();
       if (curLength > bFarthestLengthCache) {
         bFarthestLengthCache = curLength;
         bOutestPortal = portal;
       }
     });
 
-    // find C outest. It's the Portal that makes the biggest field with aOutestPortal + bOutestPortal
+    // eslint-disable-next-line max-len
+    // 4. find C outest. It's the Portal that makes the biggest field with aOutestPortal + bOutestPortal
     let cOutestPortal: Portal = this.portals[2];
     let cHighestVolumeCache: number = 0;
     this.portals.forEach((portal: Portal) => {
-      const curVolume: number = Link.volume(aOutestPortal, bOutestPortal, portal);
+      const curVolume: number = Link.getVolumeOfST(aOutestPortal, bOutestPortal, portal);
       if (curVolume > cHighestVolumeCache) {
         cHighestVolumeCache = curVolume;
         cOutestPortal = portal;
       }
     });
 
-    const mid: IPoint = Link.getMid(aOutestPortal, bOutestPortal, cOutestPortal);
+    // 5. find the Mid of each Outest Point to
+    const abLat = (aOutestPortal.lat + bOutestPortal.lat) / 2;
+    const abLng = (aOutestPortal.lng + bOutestPortal.lng) / 2;
+    const bcLat = (bOutestPortal.lat + cOutestPortal.lat) / 2;
+    const bcLng = (bOutestPortal.lng + cOutestPortal.lng) / 2;
+    const caLat = (cOutestPortal.lat + aOutestPortal.lat) / 2;
+    const caLng = (cOutestPortal.lng + aOutestPortal.lng) / 2;
+
+    // ???. find mid of outest triangle
+    const midOutestField: IPoint = Link.getMidField(aOutestPortal, bOutestPortal, cOutestPortal);
   }
 
   public getDraw = () => {

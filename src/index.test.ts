@@ -16,7 +16,7 @@ test('first test', () => {
 test('mid', () => {
   expect(autodraw.getMidLat()).toBe(0);
   expect(autodraw.getMidLng()).toBe(0);
-  expect(autodraw.getMid()).toMatchObject({lat:0, lng:0});
+  expect(autodraw.getMidPortals()).toMatchObject({lat:0, lng:0});
 
   autodraw.addPortal({lat: 1,lng: 1});
   autodraw.addPortal({lat: 2,lng: 2});
@@ -24,6 +24,6 @@ test('mid', () => {
 
   expect(autodraw.getMidLat()).toBe(2);
   expect(autodraw.getMidLng()).toBe(2);
-  expect(autodraw.getMid()).toMatchObject({lat:2, lng:2});
+  expect(autodraw.getMidPortals()).toMatchObject({lat:2, lng:2});
 });
 
